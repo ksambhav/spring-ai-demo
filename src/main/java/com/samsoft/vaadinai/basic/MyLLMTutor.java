@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.embedding.EmbeddingModel;
 import org.vaadin.firitin.components.messagelist.MarkdownMessage;
 import org.vaadin.lineawesome.LineAwesomeIconUrl;
 
@@ -26,8 +25,7 @@ public class MyLLMTutor extends VerticalLayout {
 
     private final String CHAT_CONVERSATION_ID = UUID.randomUUID().toString();
 
-    public MyLLMTutor(ChatClient.Builder builder, ChatMemory memory, EmbeddingModel embeddingModel) {
-        log.debug("EmbeddingModel = {}", embeddingModel);
+    public MyLLMTutor(ChatClient.Builder builder, ChatMemory memory) {
         setSizeFull();
         var chatClient = builder
                 .defaultAdvisors(new MessageChatMemoryAdvisor(memory))

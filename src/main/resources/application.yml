@@ -6,7 +6,7 @@ spring:
   application:
     name: spring-ai-demo
   datasource:
-    url: jdbc:postgresql://localhost:5432/samsoft
+    url: jdbc:postgresql://localhost:30432/samsoft
     username: user
     password: password
   ai:
@@ -20,12 +20,13 @@ spring:
     ollama:
       init:
         pull-model-strategy: WHEN_MISSING
-      base-url: http://localhost:11434
+      base-url: http://ollama.local
       chat:
         enabled: true
         model: gemma3:4b
       embedding:
         enabled: true
+        model: gemma3:4b
   servlet:
     multipart:
       max-file-size: 500MB
