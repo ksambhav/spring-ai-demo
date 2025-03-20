@@ -18,7 +18,7 @@ public class AppLayoutBasic extends AppLayout {
 
     public AppLayoutBasic() {
         DrawerToggle toggle = new DrawerToggle();
-        H1 title = new H1("MyApp");
+        H1 title = new H1("My GPT");
         title.getStyle().set("font-size", "var(--lumo-font-size-l)").set("margin", "0");
         SideNav nav = getSideNav();
         Scroller scroller = new Scroller(nav);

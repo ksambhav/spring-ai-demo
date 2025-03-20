@@ -12,10 +12,10 @@ import org.springframework.context.annotation.Bean;
 @Push
 @SpringBootApplication
 @Theme(value = "my-theme", variant = "dark")
-public class SpringAiVaadinApp implements AppShellConfigurator {
+public class SpringAIVaadinApp implements AppShellConfigurator {
 
     public static void main(String[] args) {
-        SpringApplication.run(SpringAiVaadinApp.class, args);
+        SpringApplication.run(SpringAIVaadinApp.class, args);
     }
 
     @Bean

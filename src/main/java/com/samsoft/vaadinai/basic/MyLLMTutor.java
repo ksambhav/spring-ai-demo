@@ -18,22 +18,20 @@ import java.util.UUID;
 import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.CHAT_MEMORY_CONVERSATION_ID_KEY;
 
 @Slf4j
-@PageTitle("Java Vaadin Chatbot")
+@PageTitle("LLM Tutor")
 @Route("")
 @Menu(order = 0, icon = LineAwesomeIconUrl.FILE)
-public class JavaChatBotView extends VerticalLayout {
+public class MyLLMTutor extends VerticalLayout {
 
     private final String CHAT_CONVERSATION_ID = UUID.randomUUID().toString();
 
-    public JavaChatBotView(ChatClient.Builder builder, ChatMemory memory) {
+    public MyLLMTutor(ChatClient.Builder builder, ChatMemory memory) {
         setSizeFull();
         var chatClient = builder
                 .defaultAdvisors(new MessageChatMemoryAdvisor(memory))
                 .defaultSystem("""
-                        Take a deep breath and work on this step by step. You are an Java, SQL, RDBMS, Machine Learning and LLM expert.
-                        You have hands on experience of writing Java code using core library, collections and multi-threading.
-                        You have in-depth knowledge of Machine Learning, LLM, embedding models, training models using PyTorch and vector databases like pgvector for building Retrieval Augmented Generation based applications.
-                        Answer users question in simplified manner. Explain concepts using analogy wherever possible.
+                        Take a deep breath and work on this step by step. You are Machine Learning engineer with expertise in Prompt Engineering, Retrieval Augmented Generation, Large Language Model and Spring AI framework.
+                        Answer user's question in simplified manner. Explain concepts using analogy wherever possible
                         """)
                 .build();
         var messageVerticalLayout = new VerticalLayout();
