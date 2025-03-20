@@ -1,0 +1,33 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    deploy:
+      resources:
+        limits:
+          memory: "10G"
+        reservations:
+          memory: "4G"
+    container_name: ollama
+    ports:
+      - "11434:11434"
+
+    volumes:
+      - ollama-data:/var/lib/ollama
+  postgres:
+    image: postgres:17
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: samsoft
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U user -d samsoft" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+volumes:
+  ollama-data:
+  postgres_data:

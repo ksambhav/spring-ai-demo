@@ -1,0 +1,46 @@
+vaadin:
+  launch-browser: true
+spring:
+  main:
+    banner-mode: off
+  application:
+    name: spring-ai-demo
+  datasource:
+    url: jdbc:postgresql://localhost:5432/samsoft
+    username: user
+    password: password
+  ai:
+    ollama:
+      init:
+        pull-model-strategy: WHEN_MISSING
+      base-url: http://localhost:11434
+      chat:
+        enabled: true
+        options:
+          model: gemma3:4b
+  servlet:
+    multipart:
+      max-file-size: 500MB
+logging:
+  level:
+    root: warn
+    com.samsoft: debug
+    org.springframework.ai: info
+
+server:
+  port: 9090
+management:
+  readiness:
+    enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+  health:
+    readinessstate:
+      enabled: true
