@@ -10,14 +10,22 @@ spring:
     username: user
     password: password
   ai:
+    vectorstore:
+      pgvector:
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
+        initialize-schema: true
+        #        schema-name: my_schema
+        schema-validation: true
     ollama:
       init:
         pull-model-strategy: WHEN_MISSING
       base-url: http://localhost:11434
       chat:
         enabled: true
-        options:
-          model: gemma3:4b
+        model: gemma3:4b
+      embedding:
+        enabled: true
   servlet:
     multipart:
       max-file-size: 500MB

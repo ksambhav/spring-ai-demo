@@ -1,40 +1,124 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: ollama-server
+  name: pgvector
 spec:
+  serviceName: "pgvector"
   replicas: 1
   selector:
     matchLabels:
-      app: ollama-server
+      app: pgvector
   template:
     metadata:
       labels:
-        app: ollama-server
+        app: pgvector
     spec:
       containers:
-        - name: ollama-server
-          image: ollama/ollama-server:latest
+        - name: pgvector
+          image: pgvector/pgvector:pg17
           ports:
-            - containerPort: 11434
-          #          command: [ "/bin/sh" ]
-          #          args: [ "-c", "wget -O /models/gemma.model http://example.com/path/to/gemma.model && ./start-server.sh" ]
+            - containerPort: 5432
+              name: postgres
+          env:
+            - name: POSTGRES_PASSWORD
+              value: "password"
+            - name: POSTGRES_USER
+              value: "user"
+            - name: POSTGRES_DB
+              value: "samsoft"
+          readinessProbe:
+            exec:
+              command: [ "pg_isready", "-U", "user", "-d", "samsoft" ]
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            exec:
+              command: [ "pg_isready", "-U", "user", "-d", "samsoft" ]
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "256Mi"
+            limits:
+              memory: "512Mi"
           volumeMounts:
-            - name: model-volume
-              mountPath: /models
+            - name: pgdata
+              mountPath: /var/lib/postgresql/data
       volumes:
-        - name: model-volume
+        - name: pgdata
           emptyDir: { }
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ollama-service
+  name: pgvector
 spec:
   type: NodePort
   selector:
-    app: ollama-server
+    app: pgvector
   ports:
-    - port: 8080
+    - protocol: TCP
+      port: 5432
+      nodePort: 30432
+      targetPort: 5432
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ollama
+spec:
+  serviceName: "ollama"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ollama
+  template:
+    metadata:
+      labels:
+        app: ollama
+    spec:
+      containers:
+        - name: ollama
+          image: ollama/ollama:latest
+          ports:
+            - containerPort: 11434
+              name: ollama-api
+          readinessProbe:
+            httpGet:
+              path: "/"
+              port: 11434
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: "/"
+              port: 11434
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "1Gi"
+            limits:
+              memory: "6Gi"
+          volumeMounts:
+            - name: ollama-data
+              mountPath: /root/.ollama
+      volumes:
+        - name: ollama-data
+          emptyDir: { }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ollama
+spec:
+  type: NodePort
+  selector:
+    app: ollama
+  ports:
+    - protocol: TCP
+      port: 11434
       targetPort: 11434
-      nodePort: 30007
+      nodePort: 31434

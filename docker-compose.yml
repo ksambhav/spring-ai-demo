@@ -6,7 +6,7 @@ services:
         limits:
           memory: "10G"
         reservations:
-          memory: "4G"
+          memory: "1G"
     container_name: ollama
     ports:
       - "11434:11434"
@@ -14,7 +14,7 @@ services:
     volumes:
       - ollama-data:/var/lib/ollama
   postgres:
-    image: postgres:17
+    image: pgvector/pgvector:pg17
     ports:
       - "5432:5432"
     environment:

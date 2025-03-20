@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.embedding.EmbeddingModel;
 import org.vaadin.firitin.components.messagelist.MarkdownMessage;
 import org.vaadin.lineawesome.LineAwesomeIconUrl;
 
@@ -25,14 +26,12 @@ public class MyLLMTutor extends VerticalLayout {
 
     private final String CHAT_CONVERSATION_ID = UUID.randomUUID().toString();
 
-    public MyLLMTutor(ChatClient.Builder builder, ChatMemory memory) {
+    public MyLLMTutor(ChatClient.Builder builder, ChatMemory memory, EmbeddingModel embeddingModel) {
+        log.debug("EmbeddingModel = {}", embeddingModel);
         setSizeFull();
         var chatClient = builder
                 .defaultAdvisors(new MessageChatMemoryAdvisor(memory))
-                .defaultSystem("""
-                        Take a deep breath and work on this step by step. You are Machine Learning engineer with expertise in Prompt Engineering, Retrieval Augmented Generation, Large Language Model and Spring AI framework.
-                        Answer user's question in simplified manner. Explain concepts using analogy wherever possible
-                        """)
+                .defaultSystem(PromptConstants.LLM_TUTOR_SYS_PROMPT)
                 .build();
         var messageVerticalLayout = new VerticalLayout();
         var input = new MessageInput();
