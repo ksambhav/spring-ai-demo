@@ -98,10 +98,10 @@ spec:
             periodSeconds: 20
           resources:
             requests:
-              cpu: "100m"
-              memory: "1Gi"
+              cpu: "2"
+              memory: "8Gi"
             limits:
-              memory: "6Gi"
+              memory: "10Gi"
           volumeMounts:
             - name: ollama-data
               mountPath: /root/.ollama
