@@ -18,7 +18,7 @@ import java.util.UUID;
 import static org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor.CHAT_MEMORY_CONVERSATION_ID_KEY;
 
 @Slf4j
-@PageTitle("LLM Tutor")
+@PageTitle("My Guru")
 @Route("")
 @Menu(order = 0, icon = LineAwesomeIconUrl.FILE)
 public class MyLLMTutor extends VerticalLayout {
@@ -29,7 +29,7 @@ public class MyLLMTutor extends VerticalLayout {
         setSizeFull();
         var chatClient = builder
                 .defaultAdvisors(new MessageChatMemoryAdvisor(memory))
-                .defaultSystem(PromptConstants.LLM_TUTOR_SYS_PROMPT)
+                .defaultSystem(PromptConstants.AMC_TUTOR_SYS_PROMPT)
                 .build();
         var messageVerticalLayout = new VerticalLayout();
         var input = new MessageInput();
